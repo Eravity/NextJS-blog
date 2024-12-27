@@ -1,4 +1,4 @@
-import Card from '@/app/_components/Card';
+import Card from "@/app/_components/Card";
 
 type Repo = {
   id: number;
@@ -12,16 +12,18 @@ export default async function Items() {
   const data = await response.json();
 
   return (
-    <div>
+    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {data.map((repo: Repo) => (
-        <div className="mb-4" key={repo.id}>
-          <Card>
-            <h1 key={repo.title}>{repo.title}</h1>
-            <p key={repo.description}>{repo.description}</p>
-            <p key={repo.stargazers_count}>{repo.stargazers_count}</p>
+        <div key={repo.id}>
+          <Card className="font-mono h-full">
+            <div className="flex justify-between items-center mb-4">
+              <h1 className="font-semibold">{repo.title}</h1>
+              <p>✨{repo.stargazers_count}</p>
+            </div>
+            <p className="text-neutral-400">{repo.description}</p>
           </Card>
         </div>
       ))}
-    </div>
+    </ul>
   );
 }
