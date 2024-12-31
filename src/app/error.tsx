@@ -1,9 +1,15 @@
-'use client'
+"use client";
 
-export default function Error() {
+export default function GlobalError({ error }: { error: Error }) {
   return (
-    <div className="absolute inset-20 flex items-center justify-center">
-      <h1 className="text-4xl font-semibold">Something went wrong 😣</h1>
-    </div>
+    <html>
+      <body>
+        <h2>
+          Something went wrong!
+          <br />
+          {error.toString()}
+        </h2>
+      </body>
+    </html>
   );
 }
