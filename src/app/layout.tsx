@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./_components/Header";
 import { inter, roboto } from "./fonts";
+import Chatbot from "./_components/chatbot";
 
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
           <Header />
         </header>
         <main className="mt-12">{children}</main>
+        <Chatbot />
       </body>
     </html>
   );
