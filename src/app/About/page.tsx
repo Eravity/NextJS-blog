@@ -1,9 +1,3 @@
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "About",
-}; 
-
 export default function AboutPage() {
-  return <div>Yo! This is the About page.</div>;
+  return <h1>Yo, this is the about page!</h1>;
 }

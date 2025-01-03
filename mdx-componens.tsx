@@ -1,9 +1,7 @@
-interface MdxComponents {
-  [key: string]: React.ComponentType<undefined>;
-}
-
-export function useMdxComponents(components: MdxComponents): MdxComponents {
+import type { MDXComponents } from 'mdx/types'
+ 
+export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
     ...components,
-  };
+  }
 }

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./_components/Header";
 import { inter, roboto } from "./fonts";
-import Chatbot from "./_components/chatbot";
+
 
 export const metadata: Metadata = {
   title: {
@@ -22,11 +22,10 @@ export default function RootLayout({
       <body
         className={`${inter.className} ${roboto.className} mx-auto antialiased`}
       >
-        <header>
-          <Header />
-        </header>
-        <main className="mt-12">{children}</main>
-        <Chatbot />
+          <header>
+            <Header />
+          </header>
+          <main className="mt-12">{children}</main>
       </body>
     </html>
   );
