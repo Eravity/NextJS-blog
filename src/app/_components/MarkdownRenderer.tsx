@@ -3,7 +3,7 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { dracula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { xonokai } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,21 +16,18 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
     <ReactMarkdown
       className="prose prose-slate max-w-none dark:prose-invert"
       components={{
-        // Handle code blocks with syntax highlighting
         code(props) {
           const { children, className, ...rest } = props;
           const match = /language-(\w+)/.exec(className || '');
           const language = match ? match[1] : 'text';
 
-          // If this is an inline code block, render it normally
           if (!className) {
             return <code {...rest}>{children}</code>;
           }
 
-          // For code blocks, render with syntax highlighting
           return (
             <SyntaxHighlighter
-              style={dracula}
+              style={xonokai}  
               language={language}
               PreTag="pre"
               customStyle={{

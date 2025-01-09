@@ -74,21 +74,20 @@ body {
 
   /* Stiluri pentru coduri inline */
   .prose code {
-    @apply bg-neutral-700 p-1 rounded;
+    @apply text-gray-200 font-mono px-1 py-0.5 rounded;
+    background-color: transparent; /* Elimină fundalul */
   }
 
-  /* Stiluri pentru blocuri de cod */
+  /* Stiluri pentru blocurile de cod */
   .prose pre {
-    @apply bg-gray-800 text-white p-4 rounded-lg overflow-x-auto;
+    @apply bg-neutral-900 text-gray-200 p-4 rounded-lg overflow-x-auto;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
   }
 
   /* Stiluri pentru citate */
   .prose blockquote {
-    @apply border-l-4 border-blue-500 pl-4 text-gray-700 dark:text-gray-300 italic;
+    @apply border-l-4 border-amber-500 pl-4 text-gray-700 dark:text-gray-300 italic;
   }
-}
-
-/* Stiluri pentru blocuri de cod */
-.prose pre {
-  @apply bg-gray-800 text-white p-4 rounded-lg overflow-x-auto;
 }
