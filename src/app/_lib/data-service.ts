@@ -15,3 +15,13 @@ export const getPosts = async (): Promise<Post[]> => {
   if (error) throw error;
   return data;
 };
+
+export const createPost = async (post: Post): Promise<Post> => {
+  const { data, error } = await supabase
+    .from("Posts")
+    .insert(post)
+    .single();
+
+  if (error) throw error;
+  return data;
+}
