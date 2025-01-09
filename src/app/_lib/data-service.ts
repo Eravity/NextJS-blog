@@ -5,8 +5,10 @@ export type Post = {
   description: string;
   star_count: number;
   id?: number;
+  content?: string;
 };
 
+// Get all posts
 export const getPosts = async (): Promise<Post[]> => {
   const { data, error } = await supabase
     .from("Posts")
@@ -16,6 +18,7 @@ export const getPosts = async (): Promise<Post[]> => {
   return data;
 };
 
+// create a new post
 export const createPost = async (post: Post): Promise<Post> => {
   const { data, error } = await supabase
     .from("Posts")
@@ -28,3 +31,17 @@ export const createPost = async (post: Post): Promise<Post> => {
   
   return data;
 };
+
+// get a single post
+export const getPost = async (id: number): Promise<Post> => {
+  const { data, error } = await supabase
+    .from("Posts")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) throw error;
+  if (!data) throw new Error('Post not found');
+
+  return data;
+}
