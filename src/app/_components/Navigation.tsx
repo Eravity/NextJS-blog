@@ -12,7 +12,7 @@ export default function Navigation() {
           <Link href={"/About"}>About</Link>
         </li>
         <li className={link}>
-          <Link href={"/About/Projects"}>Projects</Link>
+          <Link href={"/About/Posts"}>Posts</Link>
         </li>
       </ul>
     </nav>

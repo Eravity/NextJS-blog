@@ -1,26 +1,20 @@
 import Card from "@/app/_components/Card";
-
-type Repo = {
-  id: number;
-  title: string;
-  description: string;
-  stargazers_count: number;
-};
+import { getPosts } from "@/app/_lib/data-service";
+import { Post } from "@/app/_lib/data-service";
 
 export default async function Items() {
-  const response = await fetch("http://localhost:3001/repos");
-  const data = await response.json();
+  const posts: Post[] = await getPosts();
 
   return (
     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {data.map((repo: Repo) => (
-        <div key={repo.id}>
-          <Card className="font-mono h-full">
+      {posts.map((post) => (
+        <div key={post.title}>
+          <Card className="font-mono h-full" slug={post.id.toString()}>
             <div className="flex justify-between items-center mb-4">
-              <h1 className="font-semibold">{repo.title}</h1>
-              <p>✨{repo.stargazers_count}</p>
+              <h1 className="font-semibold">{post.title}</h1>
+              <p>✨{post.star_count}</p>
             </div>
-            <p className="text-neutral-400">{repo.description}</p>
+            <p className="text-neutral-400">{post.description}</p>
           </Card>
         </div>
       ))}
