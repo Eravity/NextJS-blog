@@ -1,18 +1,24 @@
+import { handleCreatePost } from "../actions/handleCreatePost";
+import { useRouter } from "next/navigation";
+
 type NewPostFormProps = {
   id: string;
   onClose: () => void;
 };
 
 export default function NewPostForm({ id, onClose }: NewPostFormProps) {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const router = useRouter();
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    console.log({
-      title: formData.get('title'),
-      description: formData.get('description')
-    });
-    onClose();
-  };
+    try {
+      await handleCreatePost(new FormData(e.currentTarget));
+      router.refresh();
+      onClose();
+    } catch (error) {
+      throw new Error(error instanceof Error ? error.message : String(error));
+    }
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
@@ -48,17 +54,14 @@ export default function NewPostForm({ id, onClose }: NewPostFormProps) {
           />
         </div>
         <div className="flex justify-end gap-2">
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={onClose}
             className="px-3 py-1 bg-neutral-700 rounded"
           >
             Cancel
           </button>
-          <button 
-            type="submit" 
-            className="px-3 py-1 bg-amber-500 rounded"
-          >
+          <button type="submit" className="px-3 py-1 bg-amber-500 rounded">
             Create
           </button>
         </div>
