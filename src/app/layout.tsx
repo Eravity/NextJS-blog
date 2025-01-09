@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./_components/Header";
 import { inter, roboto } from "./fonts";
-
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: {
@@ -26,6 +26,7 @@ export default function RootLayout({
             <Header />
           </header>
           <main className="mt-12">{children}</main>
+          <Toaster position="top-center" />
       </body>
     </html>
   );

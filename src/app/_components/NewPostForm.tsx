@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import { handleCreatePost } from "../actions/handleCreatePost";
 import { useRouter } from "next/navigation";
 
@@ -13,10 +14,17 @@ export default function NewPostForm({ id, onClose }: NewPostFormProps) {
     e.preventDefault();
     try {
       await handleCreatePost(new FormData(e.currentTarget));
+
+      toast.success("Post created successfully!", {
+        duration: 2500,
+      });
+
       router.refresh();
       onClose();
     } catch (error) {
-      throw new Error(error instanceof Error ? error.message : String(error));
+      toast.error(error instanceof Error ? error.message : String(error),{
+        duration: 2500,
+      });
     }
   }
 

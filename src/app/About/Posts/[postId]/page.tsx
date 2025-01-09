@@ -1,5 +1,7 @@
 const page: React.FC = () => {
-  return <div>This is a dynamic route!</div>;
+  return <div>
+    
+  </div>;
 };
 
 export default page;
