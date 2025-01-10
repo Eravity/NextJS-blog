@@ -64,7 +64,7 @@ export default function NewPostForm({ id, onClose }: NewPostFormProps) {
 
         <div className="mb-4">
           <label htmlFor="content" className="text-neutral-200 block mb-2">
-            Description:
+            Content:
           </label>
           <textarea
             id="content"
