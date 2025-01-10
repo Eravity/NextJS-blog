@@ -81,7 +81,7 @@ const EditingForm: React.FC<EditingFormProps> = ({
           name="content"
           placeholder="Post content"
           defaultValue={post.content}
-          className="w-full p-2 bg-neutral-800 outline-none border border-neutral-700 focus:border-amber-500 rounded min-h-[200px]"
+          className="w-full p-2 bg-neutral-800 outline-none border border-neutral-700 focus:border-amber-500 rounded min-h-[600px]"
         />
       </form>
     </div>

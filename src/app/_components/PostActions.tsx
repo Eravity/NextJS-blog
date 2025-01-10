@@ -1,5 +1,4 @@
 'use client';
-
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
@@ -34,7 +33,6 @@ export default function PostActions({ postId, post }: PostActionsProps) {
   };
 
   if (isEditing) {
-    // Editing mode: only show form
     return (
       <EditingForm
         params={{ id: postId }}

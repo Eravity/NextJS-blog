@@ -6,6 +6,36 @@ body {
   @apply container mx-auto bg-neutral-900 text-neutral-200 max-w-2xl;
 }
 
+/* Global Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  @apply rounded-full bg-gray-100 dark:bg-neutral-700;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-gray-300 dark:bg-neutral-500;
+}
+
+/* Scrollbar Utility Class */
+.scrollbar-custom {
+  @apply overflow-y-auto;
+}
+
+.scrollbar-custom::-webkit-scrollbar {
+  width: 0.5rem;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  @apply rounded-full bg-gray-100 dark:bg-neutral-700;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-gray-300 dark:bg-neutral-500;
+}
+
 @layer components {
   /* Stiluri pentru elemente de text în proza */
   .prose {
