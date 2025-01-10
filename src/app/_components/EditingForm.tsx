@@ -48,7 +48,7 @@ const EditingForm: React.FC<EditingFormProps> = ({
   return (
     <div className="w-full max-w-2xl mx-auto">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex float-right gap-2">
+        <div className="flex float-right gap-4">
           <button
             type="submit"
             className="px-3 py-1 bg-amber-500 text-white rounded "
