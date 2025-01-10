@@ -1,6 +1,6 @@
 import Card from "@/app/_components/Card";
-import { getPosts } from "@/app/_lib/data-service";
-import { Post } from "@/app/_lib/data-service";
+import { getPosts, Post } from "@/app/_lib/data-service";
+import formatDate from "../utility/useFormattedDate";
 
 export default async function Items() {
   const posts: Post[] = await getPosts();
@@ -16,7 +16,9 @@ export default async function Items() {
                 <p>✨{post.star_count}</p>
               </div>
               <p className="text-neutral-400">{post.description}</p>
-              <p className="mt-auto ml-auto pt-4 text-sm text-neutral-500">{post.created_at.slice(0,10)}</p>
+              <p className="mt-auto ml-auto pt-4 text-sm text-neutral-500">
+                {formatDate(post.created_at)}
+              </p>
             </div>
           </Card>
         </div>

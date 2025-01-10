@@ -3,7 +3,7 @@ import supabase from "./supabase";
 export type Post = {
   title: string;
   description: string;
-  star_count: number;
+  star_count?: number;
   id?: number;
   content?: string;
   created_at: string;
@@ -72,16 +72,21 @@ export const deletePost = async (id: number): Promise<void> => {
 };
 
 // update a post
-export const updatePost = async (id: number, post: Post): Promise<Post> => {
+export async function updatePost(id: number, postData: {
+  title: string;
+  description: string;
+  content: string;
+}) {
   const { data, error } = await supabase
     .from("Posts")
-    .update(post)
+    .update(postData)
     .eq("id", id)
     .select()
     .single();
 
-  if (error) throw error;
-  if (!data) throw new Error('Failed to update post');
-
+  if (error) {
+    console.error(error);
+    throw new Error("Post could not be updated");
+  }
   return data;
-};
+}

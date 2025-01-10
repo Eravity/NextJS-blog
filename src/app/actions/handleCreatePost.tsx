@@ -10,5 +10,5 @@ export async function handleCreatePost(formData: FormData) {
     throw new Error('Title, description and some content are required');
   }
 
-  return createPost({ title, description, content, star_count: 0 });
+  return createPost({ title, description, content, star_count: 0, created_at: new Date().toISOString() });
 }

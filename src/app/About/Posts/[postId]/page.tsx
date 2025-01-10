@@ -14,7 +14,11 @@ export default async function Page({
 
   return (
     <div>
-      <PostActions postId={postId} />
+      <PostActions postId={postId} post={{
+        title: post.title,
+        description: post.description,
+        content: post.content?.toString() || ""
+      }} />
       <div>
         <h1 className="text-3xl font-bold mb-4">{title}</h1>
         <h2 className="text-justify">{post.description}</h2>

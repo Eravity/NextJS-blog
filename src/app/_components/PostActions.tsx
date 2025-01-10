@@ -3,13 +3,21 @@
 import { deletePost } from "@/app/_lib/data-service";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import { useState } from "react";
+import EditingForm from "./EditingForm";
 
 interface PostActionsProps {
   postId: number;
+  post: {
+    title: string;
+    description: string;
+    content: string;
+  };
 }
 
-export default function PostActions({ postId }: PostActionsProps) {
+export default function PostActions({ postId, post }: PostActionsProps) {
   const router = useRouter();
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleDelete = async () => {
     try {
@@ -26,9 +34,24 @@ export default function PostActions({ postId }: PostActionsProps) {
     }
   };
 
+  if (isEditing) {
+    return (
+      <EditingForm 
+        params={{ id: postId }} 
+        post={post}
+        onCancel={() => setIsEditing(false)}
+      />
+    );
+  }
+
   return (
     <div className="flex justify-end gap-4">
-      <button className="px-3 py-1 bg-amber-500 rounded">Edit</button>
+      <button 
+        className="px-3 py-1 bg-amber-500 rounded"
+        onClick={() => setIsEditing(true)}
+      >
+        Edit
+      </button>
       <button
         className="px-3 py-1 bg-red-500 rounded"
         onClick={handleDelete}
