@@ -41,6 +41,7 @@ const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {
             </SyntaxHighlighter>
           );
         },
+        
         // Handle images with Next.js Image component
         img(props) {
           return (

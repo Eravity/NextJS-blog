@@ -61,6 +61,18 @@ export default function NewPostForm({ id, onClose }: NewPostFormProps) {
             className="w-full p-2 bg-neutral-800 text-neutral-200 rounded border border-neutral-600"
           />
         </div>
+
+        <div className="mb-4">
+          <label htmlFor="content" className="text-neutral-200 block mb-2">
+            Description:
+          </label>
+          <textarea
+            id="content"
+            name="content"
+            className="w-full p-2 bg-neutral-800 text-neutral-200 rounded border border-neutral-600"
+          />
+        </div>
+
         <div className="flex justify-end gap-2">
           <button
             type="button"
