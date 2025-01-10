@@ -35,16 +35,31 @@ export const createPost = async (post: Post): Promise<Post> => {
 
 // get a single post
 export const getPost = async (id: number): Promise<Post> => {
+  if (!id || isNaN(id)) {
+    throw new Error('Invalid post ID');
+  }
+
   const { data, error } = await supabase
     .from("Posts")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (error) throw error;
-  if (!data) throw new Error('Post not found');
+  if (error) {
+    console.error('Supabase error:', error);
+    throw new Error('Failed to fetch post');
+  }
 
-  return data;
+  if (!data) {
+    throw new Error('Post not found');
+  }
+
+  return {
+    ...data,
+    content: data.content || '',
+    description: data.description || '',
+    title: data.title || '',
+  };
 }
 
 // delete a post
