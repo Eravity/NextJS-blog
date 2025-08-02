@@ -1,107 +1,174 @@
-import supabase from "./supabase";
+// Configuration for the Grindly API
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://grindly.onrender.com';
+const API_VERSION = '/api/v1';
 
-export type Post = {
-  title: string;
-  description: string;
-  star_count?: number;
-  id?: number;
-  content?: string;
-  created_at: string;
+// Get auth token from localStorage or environment
+const getAuthToken = (): string | null => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('authToken');
+  }
+  return process.env.GRINDLY_AUTH_TOKEN || null;
 };
 
-// Get all posts
-export const getPosts = async (): Promise<Post[]> => {
-  const { data, error } = await supabase
-    .from("Posts")
-    .select("*");
-
-  if (error) throw error;
-  return data;
-};
-
-// create a new post
-export const createPost = async (post: Post): Promise<Post> => {
-  const { data, error } = await supabase
-    .from("Posts")
-    .insert(post)
-    .select()
-    .single();
-
-  if (error) throw error;
-  if (!data) throw new Error('Failed to create post');
+// API helper function
+const apiRequest = async (endpoint: string, options: RequestInit = {}) => {
+  const token = getAuthToken();
   
-  return data;
-};
-
-// get a single post
-export const getPost = async (id: number): Promise<Post> => {
-  if (!id || isNaN(id)) {
-    throw new Error('Invalid post ID');
-  }
-
-  const { data, error } = await supabase
-    .from("Posts")
-    .select("*")
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    console.error('Supabase error:', error);
-    throw new Error('Failed to fetch post');
-  }
-
-  if (!data) {
-    throw new Error('Post not found');
-  }
-
-  return {
-    ...data,
-    content: data.content || '',
-    description: data.description || '',
-    title: data.title || '',
+  const config: RequestInit = {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }),
+      ...options.headers,
+    },
   };
-}
 
-// delete a post
-export const deletePost = async (id: number): Promise<void> => {
-  // First verify post exists
-  const { data: existingPost } = await supabase
-    .from("Posts")
-    .select()
-    .eq("id", id)
-    .single();
-
-  if (!existingPost) {
-    throw new Error(`Post with id ${id} not found`);
+  const fullUrl = `${API_BASE_URL}${API_VERSION}${endpoint}`;
+  
+  const response = await fetch(fullUrl, config);
+  
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({ message: 'Request failed' }));
+    throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
   }
 
-  const { error } = await supabase
-    .from("Posts")
-    .delete()
-    .eq("id", id);
+  return response.json();
+};
 
-  if (error) {
-    console.error('Supabase delete error:', error);
-    throw new Error(`Failed to delete post: ${error.message}`);
+// Task interface matching the Grindly API response
+export interface Task {
+  _id: string;
+  title: string;
+  description?: string;
+  user?: string;
+  dueDate?: string;
+  frequency: 'once' | 'daily' | 'weekly' | 'monthly';
+  completed: boolean;
+  xpReward: number;
+  coinReward: number;
+  completedAt?: string;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+// Task creation interface
+export interface CreateTaskData {
+  title: string;
+  description?: string;
+  frequency?: 'once' | 'daily' | 'weekly' | 'monthly';
+  xpReward?: number;
+  coinReward?: number;
+  dueDate?: string;
+}
+
+// Task update interface
+export interface UpdateTaskData {
+  title?: string;
+  description?: string;
+  frequency?: 'once' | 'daily' | 'weekly' | 'monthly';
+  xpReward?: number;
+  coinReward?: number;
+  dueDate?: string;
+}
+
+// Get all tasks
+export const getTasks = async (): Promise<Task[]> => {
+  const token = getAuthToken();
+  if (!token) {
+    throw new Error('Authentication required. Please log in to view tasks.');
+  }
+
+  const response = await apiRequest('/tasks');
+  
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to fetch tasks');
+  }
+
+  return response.data;
+};
+
+// Create a new task
+export const createTask = async (taskData: CreateTaskData): Promise<Task> => {
+  const response = await apiRequest('/tasks', {
+    method: 'POST',
+    body: JSON.stringify({
+      title: taskData.title,
+      description: taskData.description || '',
+      frequency: taskData.frequency || 'once',
+      xpReward: taskData.xpReward || 5,
+      coinReward: taskData.coinReward || 1,
+      dueDate: taskData.dueDate,
+    }),
+  });
+
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to create task');
+  }
+
+  return response.data;
+};
+
+// Get a single task
+export const getTask = async (id: string): Promise<Task> => {
+  if (!id) {
+    throw new Error('Invalid task ID');
+  }
+
+  const response = await apiRequest(`/tasks/${id}`);
+
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to fetch task');
+  }
+
+  return response.data;
+};
+
+// Delete a task
+export const deleteTask = async (id: string): Promise<void> => {
+  if (!id) {
+    throw new Error('Invalid task ID');
+  }
+
+  const response = await apiRequest(`/tasks/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to delete task');
   }
 };
 
-// update a post
-export async function updatePost(id: number, postData: {
-  title: string;
-  description: string;
-  content: string;
-}) {
-  const { data, error } = await supabase
-    .from("Posts")
-    .update(postData)
-    .eq("id", id)
-    .select()
-    .single();
-
-  if (error) {
-    console.error(error);
-    throw new Error("Post could not be updated");
+// Update a task
+export const updateTask = async (id: string, taskData: UpdateTaskData): Promise<Task> => {
+  if (!id) {
+    throw new Error('Invalid task ID');
   }
-  return data;
-}
+
+  const response = await apiRequest(`/tasks/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(taskData),
+  });
+
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to update task');
+  }
+
+  return response.data;
+};
+
+// Mark task as complete
+export const completeTask = async (id: string): Promise<Task> => {
+  if (!id) {
+    throw new Error('Invalid task ID');
+  }
+
+  const response = await apiRequest(`/tasks/${id}/complete`, {
+    method: 'PATCH',
+  });
+
+  if (!response.success) {
+    throw new Error(response.message || 'Failed to complete task');
+  }
+
+  return response.data;
+};

@@ -1,27 +1,33 @@
 "use server";
 
-import { updatePost } from "../_lib/data-service";
+import { updateTask } from "../_lib/data-service";
 import { revalidatePath } from "next/cache";
 
-export async function handleEditPost(id: number, formData: FormData) {
+export async function handleUpdateTask(id: string, formData: FormData) {
   try {
     const title = formData.get("title");
     const description = formData.get("description");
-    const content = formData.get("content");
+    const frequency = formData.get("frequency");
+    const xpReward = formData.get("xpReward");
+    const coinReward = formData.get("coinReward");
+    const dueDate = formData.get("dueDate");
 
-    console.log('Updating post with data:', { id, title, description, content });
+    console.log('Updating task with data:', { id, title, description, frequency, xpReward, coinReward, dueDate });
 
-    if (!title || !description || !content) {
-      throw new Error("Missing required fields");
+    if (!title || !description) {
+      throw new Error("Title and description are required");
     }
 
-    const updatedPost = await updatePost(id, {
+    const updatedTask = await updateTask(id, {
       title: title.toString(),
       description: description.toString(),
-      content: content.toString(),
+      frequency: (frequency?.toString() as 'once' | 'daily' | 'weekly' | 'monthly') || 'once',
+      xpReward: parseInt(xpReward?.toString() || '5'),
+      coinReward: parseInt(coinReward?.toString() || '1'),
+      dueDate: dueDate?.toString() || undefined,
     });
 
-    console.log('Post updated:', updatedPost);
+    console.log('Task updated:', updatedTask);
 
     revalidatePath("/About/Posts");
     revalidatePath(`/About/Posts/${id}`);

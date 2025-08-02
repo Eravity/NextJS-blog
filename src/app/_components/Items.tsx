@@ -1,28 +1,44 @@
-import Card from "@/app/_components/Card";
-import { getPosts, Post } from "@/app/_lib/data-service";
-import formatDate from "../utility/useFormattedDate";
+import TaskCard from "@/app/_components/TaskCard";
+import { getTasks, Task } from "@/app/_lib/data-service";
 
 export default async function Items() {
-  const posts: Post[] = await getPosts();
+  let tasks: Task[] = [];
+  let error: string | null = null;
+
+  try {
+    tasks = await getTasks();
+  } catch (err) {
+    console.error('Error fetching tasks:', err);
+    error = err instanceof Error ? err.message : 'Failed to load tasks';
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-red-400 mb-4">⚠️ {error}</p>
+        <p className="text-neutral-500">
+          Please make sure you&apos;re logged in and the API is running.
+        </p>
+      </div>
+    );
+  }
+
+  if (tasks.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-neutral-500">No tasks found.</p>
+        <p className="text-sm text-neutral-600 mt-2">
+          Create your first task to get started!
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {posts.map((post) => (
-        <div key={post.title}>
-          <Card className="flex flex-col font-mono h-full" postId={post.id!.toString()}>
-            <div className="flex-1 flex flex-col">
-              <div className="flex justify-between items-center mb-4">
-                <h1 className="font-semibold">{post.title}</h1>
-                <p>✨{post.star_count}</p>
-              </div>
-              <p className="text-neutral-400">{post.description}</p>
-              <p className="mt-auto ml-auto pt-4 text-sm text-neutral-500">
-                {formatDate(post.created_at)}
-              </p>
-            </div>
-          </Card>
-        </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {tasks.map((task) => (
+        <TaskCard key={task._id} task={task} />
       ))}
-    </ul>
+    </div>
   );
 }

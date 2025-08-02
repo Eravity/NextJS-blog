@@ -1,18 +1,32 @@
 import Link from "next/link";
 
 export default function Navigation() {
-  const link = "md:p-1 hover:bg-gray-200 hover:text-gray-900 text-2xl md:text-base";
   return (
-    <nav className="font-mono">
-      <ul className="flex flex-col md:flex-row md:space-x-5">
-        <div className={link}>
-          <Link href={"/"}>Home</Link>
-        </div>
-        <li className={link}>
-          <Link href={"/About"}>About</Link>
+    <nav>
+      <ul className="flex space-x-6">
+        <li>
+          <Link 
+            href="/" 
+            className="text-neutral-300 hover:text-white transition-colors duration-200 font-medium"
+          >
+            Home
+          </Link>
         </li>
-        <li className={link}>
-          <Link href={"/About/Posts"}>Posts</Link>
+        <li>
+          <Link 
+            href="/About" 
+            className="text-neutral-300 hover:text-white transition-colors duration-200 font-medium"
+          >
+            About
+          </Link>
+        </li>
+        <li>
+          <Link 
+            href="/About/Posts" 
+            className="text-neutral-300 hover:text-white transition-colors duration-200 font-medium"
+          >
+            Tasks
+          </Link>
         </li>
       </ul>
     </nav>
